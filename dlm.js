@@ -10,9 +10,7 @@
 
 使用方法：
 Surge、QuantumultX、Loon、Shadowrocket: 
-#!desc = 将获取Cookie脚本保存到本地
-#!desc = 打开达乐美披萨公众号->优惠｜咨询->有奖游戏->手动完成一次游戏，若提示获取Cookie成功则可以使用该脚本
-#!desc = 关闭获取ck脚本，避免产生不必要的mitm。
+#!desc = 将获取Cookie脚本保存到本地，打开达乐美披萨公众号->优惠｜咨询->有奖游戏->手动完成一次游戏，若提示获取Cookie成功则可以使用该脚本，关闭获取ck脚本，避免产生不必要的mitm。
 #!name = 达美乐披萨
 #!icon = https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/icon/Dlm.png
 #!tag = 脚本
