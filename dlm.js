@@ -9,8 +9,7 @@
 脚本兼容：NE/Node.js环境
 
 使用方法：
-Surge、QuantumultX、Loon、Shadowrocket: 
-#!author = Sliverkiss
+#!author = Loon0x00[https://gist.githubusercontent.com/Sliverkiss/6b4da0d367d13790a9fd1d928c82bdf8/raw/dlm.js]
 #!desc = 将获取Cookie脚本保存到本地，打开达乐美披萨公众号->优惠｜咨询->有奖游戏->手动完成一次游戏，若提示获取Cookie成功则可以使用该脚本，关闭获取ck脚本，避免产生不必要的mitm。
 #!name = 达美乐披萨
 #!icon = https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/icon/Dlm.png
