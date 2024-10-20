@@ -7,7 +7,7 @@
 - 增加新的简略通知格式（更适用于多账号），可在boxjs切换，默认详细通知格式。
 
 脚本兼容：NE/Node.js环境
-#!desc = 使用方法：1.将获取Cookie脚本保存到本地2.打开达乐美披萨公众号->优惠｜咨询->有奖游戏->手动完成一次游戏，若提示获取Cookie成功则可以使用该脚本3.关闭获取ck脚本，避免产生不必要的mitm。
+#!desc = 1.将获取Cookie脚本保存到本地2.打开达乐美披萨公众号->优惠｜咨询->有奖游戏->手动完成一次游戏，若提示获取Cookie成功则可以使用该脚本3.关闭获取ck脚本，避免产生不必要的mitm。
 #!icon = https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/icon/Dlm.png
 
 [Argument]
