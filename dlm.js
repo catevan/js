@@ -1,19 +1,19 @@
 /**************************************
-@Name：达美乐披萨 优惠券抽奖
-@Author：Sliverkiss
-@Date：2023-10-18 08:43:44
+#!name = 达美乐披萨 优惠券抽奖
+#!author = Sliverkiss[https://gist.githubusercontent.com/Sliverkiss/6b4da0d367d13790a9fd1d928c82bdf8/raw/dlm.js]
+#!data = 2023-10-18 08:43:44
 
 2024.07.16
 - 增加新的简略通知格式（更适用于多账号），可在boxjs切换，默认详细通知格式。
 
 脚本兼容：NE/Node.js环境
-
-使用方法：
-#!author = Loon0x00[https://gist.githubusercontent.com/Sliverkiss/6b4da0d367d13790a9fd1d928c82bdf8/raw/dlm.js]
-#!desc = 将获取Cookie脚本保存到本地，打开达乐美披萨公众号->优惠｜咨询->有奖游戏->手动完成一次游戏，若提示获取Cookie成功则可以使用该脚本，关闭获取ck脚本，避免产生不必要的mitm。
-#!name = 达美乐披萨
+#!desc = 使用方法：
+Surge、QuantumultX、Loon、Shadowrocket: 
+1.将获取Cookie脚本保存到本地
+2.打开达乐美披萨公众号->优惠｜咨询->有奖游戏->手动完成一次游戏，若提示获取Cookie成功则可以使用该脚本
+3.关闭获取ck脚本，避免产生不必要的mitm。
 #!icon = https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/icon/Dlm.png
-#!tag = 脚本
+
 [Argument]
 CaptureCookie = switch, false, true, tag = 捕获Cookie, desc = 此开关控制插件是否捕获Cookie
 [Script]
