@@ -15,6 +15,7 @@ Surge、QuantumultX、Loon、Shadowrocket:
 #!desc = 关闭获取ck脚本，避免产生不必要的mitm。
 #!name = 达美乐披萨
 #!icon = https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/icon/Dlm.png
+#!tag = 脚本
 [Argument]
 CaptureCookie = switch, false, true, tag = 捕获Cookie, desc = 此开关控制插件是否捕获Cookie
 [Script]
