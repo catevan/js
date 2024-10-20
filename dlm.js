@@ -18,8 +18,7 @@ CaptureCookie = switch, false, true, tag = 捕获Cookie, desc = 此开关控制�
 [Script]
 
 # 捕获Cookie
-http-request ^https:\/\/game\.dominos\.com\.cn\/.+\/game\/gameDone script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/dlm.js,requires-body=true, timeout=10, tag=达美乐披萨获取token,
-enable = {CaptureCookie}
+http-request ^https:\/\/game\.dominos\.com\.cn\/.+\/game\/gameDone script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/dlm.js,requires-body=true, timeout=10,enable = {CaptureCookie},tag=达美乐披萨获取token
 # 定时签到
 cron "30 10 * * *" script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/dlm.js,timeout=300, tag=达美乐披萨
 [MITM]
