@@ -16,7 +16,7 @@ https\:\/\/h5\.if\.qidian\.com\/argus\/api\/v1\/video\/adv\/mainPage script-path
 hostname = h5.if.qidian.com
 ⏰定时任务:
 cron "30 10 * * *" script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/dlm.js,timeout=300, tag=达美乐披萨,img-url = https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/icon/Dlm.png
-https://raw.githubusercontent.com/MCdasheng/QuantumultX/main/mcdasheng.boxjs.json
+# https://raw.githubusercontent.com/MCdasheng/QuantumultX/main/mcdasheng.boxjs.json
 @params: 
     "qd_session"
     "qd_session_2"
