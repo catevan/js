@@ -17,7 +17,7 @@ CaptureCookie = switch, false, true, tag = 捕获Cookie, desc = 此开关控制�
 http-request ^https:\/\/tm-web\.pin-dao\.cn\/user\/base-userinfo script-path=https://gist.githubusercontent.com/Sliverkiss/4d0e9572b99530b7cb0e7298622aa2a9/raw/naixue.js, requires-body=true, timeout=60, enable = {CaptureCookie},tag=奈雪点单获取token
 # 定时签到
 
-cron "00 10 * * *" script-path=https://gist.githubusercontent.com/Sliverkiss/4d0e9572b99530b7cb0e7298622aa2a9/raw/naixue.js,timeout=300, tag=奈雪的茶
+cron "01 10 * * *" script-path=https://gist.githubusercontent.com/Sliverkiss/4d0e9572b99530b7cb0e7298622aa2a9/raw/naixue.js,timeout=300, tag=奈雪的茶
 [MITM]
 
 [MITM]
