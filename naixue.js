@@ -8,7 +8,7 @@ cron 0,9 * * *
 const $ = new Env("奈雪点单签到")
 
 重写:打开小程序，点击我的，进入签到页面。获取ck后不要再打开小程序，避免ck失效
-
+#!name = 奈雪的茶签到
 
 [Argument]
 CaptureCookie = switch, false, true, tag = 捕获Cookie, desc = 此开关控制插件是否捕获Cookie
