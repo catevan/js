@@ -16,7 +16,7 @@ https\:\/\/h5\.if\.qidian\.com\/argus\/api\/v1\/video\/adv\/mainPage script-path
 hostname = h5.if.qidian.com
 ⏰定时任务:
 [task local]
-cron "30 10 * * *" script-path=https://raw.githubusercontent.com/MCdasheng/QuantumultX/main/Scripts/myScripts/qidian/qidian.js, timeout=300,tag=起点读书任务,img-url=https://raw.githubusercontent.com/chxm1023/Script_X/main/icon/qidian.png
+cron "00 10 * * *" script-path=https://raw.githubusercontent.com/MCdasheng/QuantumultX/main/Scripts/myScripts/qidian/qidian.js, timeout=300,tag=起点读书任务,img-url=https://raw.githubusercontent.com/chxm1023/Script_X/main/icon/qidian.png
 📦BoxJs地址:
 https://raw.githubusercontent.com/MCdasheng/QuantumultX/main/mcdasheng.boxjs.json
 @params: 
