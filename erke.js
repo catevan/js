@@ -1,3 +1,4 @@
+#!name = 鸿星尔克
 [Argument]
 CaptureCookie = switch, false, true, tag = 捕获Cookie, desc = 此开关控制插件是否捕获Cookie
 
