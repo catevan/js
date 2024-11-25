@@ -1,7 +1,5 @@
 [Argument]
 CaptureCookie = switch, false, true, tag = 捕获Cookie, desc = 此开关控制插件是否捕获Cookie
-[MITM]
-hostname = hope.demogic.com
 
 [Script]
 
