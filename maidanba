@@ -1,0 +1,1 @@
+^https?:\/\/creditcardapp\.bankcomm\.com\/mapp\/common\/(queryGuidePageAds|getPopAds)\.do$ url reject-200
