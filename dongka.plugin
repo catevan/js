@@ -1,11 +1,25 @@
-#!name=动卡空间去广告
-#!author=You (可以修改成你的名字)
-#!version=1.0
-#!description=屏蔽中信银行动卡空间的开屏广告
+#!plugin
+# name = 动卡空间去广告
+# author = YourName (你可以替换成你的名字)
+# version = 1.0
+# description = 移除动卡空间App的开屏广告和其他潜在广告。
+# homepage = (可选，你可以放一个相关链接)
+# update_url = (可选，如果插件有更新检查链接)
 
-[Rewrite]&[Script]
+[HostName]
+# > 动卡空间 HostName
+ump.sz.creditcard.ecitic.com = 1
+m.creditcard.ecitic.com = 1
+
+[Rewrite]
 # > 动卡空间
 # hostname = ump.sz.creditcard.ecitic.com, m.creditcard.ecitic.com
+
 # 开屏广告
 ^https?:\/\/ump\.sz\.creditcard\.ecitic\.com\/citiccard\/cm-ump\/ump-gateway\/ump-net-app\/ump-net-app\/adv reject-dict
+
+# 初始化配置 (可能包含广告)
 ^https?:\/\/m\.creditcard\.ecitic\.com\/citiccard\/mbk\/appspace-getway\/getWay\/dkkj-system-web\/system\/v\d\/init-config reject-200
+
+# [Script]
+# (这个插件目前没有脚本，但如果将来有，会放在这里)
