@@ -6,7 +6,7 @@
 # homepage = (可选，你可以放一个相关链接)
 # update_url = (可选，如果插件有更新检查链接)
 
-[HostName]
+[MITM]
 # > 动卡空间 HostName
 ump.sz.creditcard.ecitic.com = 1
 m.creditcard.ecitic.com = 1
