@@ -7,9 +7,8 @@
 # update_url = (可选，如果插件有更新检查链接)
 
 [MITM]
-# > 动卡空间 HostName
-ump.sz.creditcard.ecitic.com = 1
-m.creditcard.ecitic.com = 1
+# > 动卡空间 
+hostname = ump.sz.creditcard.ecitic.com, m.creditcard.ecitic.com
 
 [Rewrite]
 # > 动卡空间
