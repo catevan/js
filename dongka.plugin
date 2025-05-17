@@ -20,5 +20,3 @@ hostname = ump.sz.creditcard.ecitic.com, m.creditcard.ecitic.com
 # 初始化配置 (可能包含广告)
 ^https?:\/\/m\.creditcard\.ecitic\.com\/citiccard\/mbk\/appspace-getway\/getWay\/dkkj-system-web\/system\/v\d\/init-config reject-200
 
-# [Script]
-# (这个插件目前没有脚本，但如果将来有，会放在这里)

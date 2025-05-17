@@ -1,4 +1,0 @@
-hostname = creditcardapp.bankcomm.com
-^https?:\/\/creditcardapp\.bankcomm\.com\/mappweb.*(Advert|Ads).do url reject-200
-^https?:\/\/creditcardapp\.bankcomm\.cn\/mappweb_interface\/common\/(qryPopAds|qryLaunchAds)\.do url reject-200
-^https?:\/\/creditcardapp\.bankcomm\.com\/mapp\/common\/(queryGuidePageAds|getPopAds)\.do$ url reject-200

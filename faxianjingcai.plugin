@@ -1,8 +1,6 @@
+[Rewrite]&[Script]
 # > 发现精彩
-# hostname = static.95508.com
-^https?:\/\/static\.95508\.com\/mmg\/images\/ads reject-dict
-# > 动卡空间
-# hostname = ump.sz.creditcard.ecitic.com, m.creditcard.ecitic.com
+hostname = static.95508.com
 # 开屏广告
-^https?:\/\/ump\.sz\.creditcard\.ecitic\.com\/citiccard\/cm-ump\/ump-gateway\/ump-net-app\/ump-net-app\/adv reject-dict
-^https?:\/\/m\.creditcard\.ecitic\.com\/citiccard\/mbk\/appspace-getway\/getWay\/dkkj-system-web\/system\/v\d\/init-config reject-200
+^https?:\/\/static\.95508\.com\/mmg\/images\/ads\/.+\/(.+1125?.+2436|.+%.+%|.+_.+_) reject-dict
+^https?:\/\/static\.95508\.com\/mmg\/ciop\/sysabbr\/cmep\/images\/apppopupads reject-dict
