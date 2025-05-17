@@ -8,11 +8,9 @@
 #!loon_version=3.2.1(372)
 #!tag=发现精彩去广告
 
-[Argument]
-# （此处无用户参数）
 
 
-[rule]
+[Rewrite]
 ^https?:\/\/static\.95508\.com\/mmg\/images\/ads\/.+\/(.+1125?.+2436|.+%.+%|.+_.+_) reject-dict
 ^https?:\/\/static\.95508\.com\/mmg\/ciop\/sysabbr\/cmep\/images\/apppopupads reject-dict
 
