@@ -1,6 +1,20 @@
-[Rewrite]&[Script]
-# > 发现精彩
-hostname = static.95508.com
-# 开屏广告
+#!name=发现精彩去广告
+#!desc=屏蔽 发现精彩去广告
+#!author=YourName
+#!homepage=https://github.com/YourRepo
+#!icon=https://example.com/icon.png
+#!system=iOS,macOS
+#!system_version=15.0
+#!loon_version=3.2.1(372)
+#!tag=发现精彩去广告
+
+[Argument]
+# （此处无用户参数）
+
+
+[rule]
 ^https?:\/\/static\.95508\.com\/mmg\/images\/ads\/.+\/(.+1125?.+2436|.+%.+%|.+_.+_) reject-dict
 ^https?:\/\/static\.95508\.com\/mmg\/ciop\/sysabbr\/cmep\/images\/apppopupads reject-dict
+
+[mitm]
+hostname = static.95508.com
