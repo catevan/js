@@ -8,7 +8,7 @@
 captureMode = switch, true, tag=强制录制中, desc=当前处于强制录制模式
 
 [MITM]
-hostname = www.ihr360.com
+hostname = *.ihr360.com
 
 [Script]
 # 1. 录制脚本 (HTTP-Request)
