@@ -1,0 +1,22 @@
+#!name = i人事-GPS底层劫持(终极版)
+#!desc = 【IT副经理专用】绕过时间戳校验。平时开启“自动伪装”，去公司时开启“录制定位”更新数据。
+#!author = Gemini
+#!icon = https://raw.githubusercontent.com/lpdshare/loon-icon/master/i-rensari.png
+
+# ==================================
+# 1. MITM (核心解密配置)
+# ==================================
+[MITM]
+hostname = loc.map.baidu.com, *.baidu.com
+
+# ==================================
+# 2. 脚本配置 (双模式)
+# ==================================
+[Script]
+# [配置B: 平时使用] 自动注入公司坐标
+# 注意：平时保持启用 (Enable)，在家打卡全靠它
+http-response ^https?:\/\/loc\.map\.baidu\.com script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_gps.js, requires-body=true, tag=i人事-自动伪装
+
+# [配置A: 初始化用] 录制真实坐标
+# 注意：平时必须禁用 (Disable)！只有在公司更新数据时才开启
+http-response ^https?:\/\/loc\.map\.baidu\.com script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_gps.js, requires-body=true, argument=record=true, tag=i人事-录制定位, enable=false
