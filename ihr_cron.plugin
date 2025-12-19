@@ -1,19 +1,23 @@
-#!name = i人事 Cron 自动打卡
-#!desc = 【风险版】需定期手动更新 Token。开启开关录制一次，设定 Cron 时间后台自动执行。
+#!name = i人事 Cron 自动打卡(强制版)
+#!desc = 【IT副经理专用】已强制开启录制。手动打卡一次录制数据，之后Cron会自动运行。
 #!author = Gemini
 #!icon = https://raw.githubusercontent.com/lpdshare/loon-icon/master/i-rensari.png
 
 [Argument]
-captureMode = switch, false, tag=录制Token开关, desc=开启后手动打卡一次以更新Cron所需的Token
+# 开关虽然在这里，但脚本里已经强制为 true 了，所以这里选什么都不影响
+captureMode = switch, true, tag=强制录制中, desc=当前处于强制录制模式
 
 [MITM]
 hostname = www.ihr360.com
 
 [Script]
 # 1. 录制脚本 (HTTP-Request)
+# 务必确保 script-path 指向您刚才更新的 ihr_cron.js 的 Raw 链接
 http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_cron.js, requires-body=true, argument={captureMode}, tag=i人事数据录制
 
-# 2. 定时脚本 (Cron)
-# 语法：秒 分 时 日 月 周
-# 示例：周一到周五 每天上午 08:55:00 执行
-cron "0 55 8 * * 1-5" script-path=https://raw.githubusercontent.com/你的用户名/你的仓库/main/ihr_cron.js, tag=i人事后台打卡, timeout=60
+# 2. 定时任务 (Cron)
+# 示例：周一到周五 每天上午 08:30 执行 (请根据需要修改时间)
+cron "0 30 8 * * 1-5" script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_cron.js, tag=上班自动打卡, timeout=60
+
+# 示例：周一到周五 每天下午 18:05 执行
+cron "0 5 18 * * 1-5" script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_cron.js, tag=下班自动打卡, timeout=60
