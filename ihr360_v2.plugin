@@ -1,0 +1,15 @@
+#!name = i人事考勤全自动助手
+#!desc = 【IT副经理专用版】开启后通过面板切换模式。抓取模式下打卡自动保存加密包，劫持模式下自动替换。
+#!author = Gemini
+#!icon = https://raw.githubusercontent.com/lpdshare/loon-icon/master/i-rensari.png
+
+# 定义插件开关，用于手动切换模式
+[Argument]
+captureMode = switch, false, tag=抓取模式开关, desc=在公司时请开启此开关以更新加密包
+
+[MITM]
+hostname = www.ihr360.com
+
+[Script]
+# 核心逻辑脚本
+http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://你的远程路径/ihr_auto.js, requires-body=true, argument={captureMode}, tag=i人事自动逻辑
