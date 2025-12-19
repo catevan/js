@@ -11,7 +11,7 @@ hostname = www.ihr360.com
 
 [Script]
 # 1. 录制脚本 (HTTP-Request)
-http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/你的用户名/你的仓库/main/ihr_cron.js, requires-body=true, argument={captureMode}, tag=i人事数据录制
+http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_cron.js, requires-body=true, argument={captureMode}, tag=i人事数据录制
 
 # 2. 定时脚本 (Cron)
 # 语法：秒 分 时 日 月 周
