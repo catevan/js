@@ -1,4 +1,4 @@
-#!name = i人事考勤全自动助手
+#!name = i人事考勤助手(自动版)
 #!desc = 【IT副经理专用】支持自动抓取与位置劫持。在公司时开启“抓取模式”打卡一次，之后在任何地方关闭开关即可实现劫持打卡。
 #!author = Gemini
 #!icon = https://raw.githubusercontent.com/lpdshare/loon-icon/master/i-rensari.png
@@ -13,54 +13,59 @@ hostname = www.ihr360.com
 
 # --- 脚本触发规则 ---
 [Script]
-# 使用内部脚本方式，匹配打卡核心解码接口
+# 确保引用的是这个文件本身的 Raw 链接
 http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr360_v2.plugin, requires-body=true, argument={captureMode}, tag=i人事自动逻辑
 
 # --- 核心逻辑脚本 (内嵌) ---
+#!here
 /**
  * 核心逻辑：自动持久化存储与加密包替换
  */
-#!here
-const url = $request.url;
-const body = $request.body;
-// 获取插件面板上的开关状态
-const isCaptureMode = $argument.captureMode === "true";
+(function() {
+    // 增加容错：确保只在有请求时运行
+    if (typeof $request === 'undefined') return $done({});
 
-if (url.indexOf("doSign/decode") !== -1 && body) {
-    let obj;
-    try {
-        obj = JSON.parse(body);
-    } catch (e) {
-        $notification.post("i人事助手", "解析失败", "请求体不是合法的JSON格式");
+    const url = $request.url;
+    const body = $request.body;
+    
+    // 严谨获取参数逻辑
+    let isCaptureMode = false;
+    if (typeof $argument !== 'undefined' && $argument) {
+        // 处理不同版本 Loon 对 argument 的解析差异
+        isCaptureMode = (String($argument.captureMode) === "true");
+    }
+
+    if (url.indexOf("doSign/decode") !== -1 && body) {
+        let obj;
+        try {
+            obj = JSON.parse(body);
+        } catch (e) {
+            $notification.post("i人事助手", "解析失败", "请求体不是合法的JSON格式");
+            return $done({});
+        }
+
+        if (isCaptureMode) {
+            // --- 录制模式：在公司使用 ---
+            let currentPayload = obj.aesReq;
+            if (currentPayload) {
+                $persistentStore.write(currentPayload, "ihr_gold_payload");
+                $notification.post("i人事助手", "✅ 加密包录制成功", "已存入Loon本地缓存");
+                console.log("🔔 [录制中] 捕获到 Payload");
+            }
+            $done({});
+        } else {
+            // --- 劫持模式：在异地使用 ---
+            let savedPayload = $persistentStore.read("ihr_gold_payload");
+            if (savedPayload) {
+                obj.aesReq = savedPayload;
+                $notification.post("i人事助手", "🛠 位置劫持已生效", "已替换为预存的公司加密数据");
+                $done({ body: JSON.stringify(obj) });
+            } else {
+                $notification.post("i人事助手", "❌ 劫持失败", "本地无预存数据，请先在公司开启抓取模式");
+                $done({});
+            }
+        }
+    } else {
         $done({});
     }
-
-    if (isCaptureMode) {
-        // --- 录制模式：在公司使用 ---
-        let currentPayload = obj.aesReq;
-        if (currentPayload) {
-            // 将加密包永久存入本地缓存
-            $persistentStore.write(currentPayload, "ihr_gold_payload");
-            
-            $notification.post("i人事助手", "✅ 加密包录制成功", "已存入Loon本地缓存，以后打卡将自动使用此包");
-            console.log("🔔 [录制中] 捕获到 Payload: " + currentPayload);
-        }
-        $done({}); // 录制时正常发出请求，不影响本次打卡
-    } else {
-        // --- 劫持模式：在异地使用 ---
-        let savedPayload = $persistentStore.read("ihr_gold_payload");
-        
-        if (savedPayload) {
-            obj.aesReq = savedPayload;
-            console.log("🚀 [劫持中] 正在注入本地预存的黄金加密包...");
-            // 发送通知提醒，确保你知道脚本在工作
-            $notification.post("i人事助手", "🛠 位置劫持已生效", "已替换为预存的公司加密数据");
-            $done({ body: JSON.stringify(obj) });
-        } else {
-            $notification.post("i人事助手", "❌ 劫持失败", "本地无预存数据，请先在公司开启抓取模式打一次卡");
-            $done({});
-        }
-    }
-} else {
-    $done({});
-}
+})();
