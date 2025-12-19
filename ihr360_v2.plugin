@@ -1,71 +1,14 @@
-#!name = i人事考勤助手(自动版)
-#!desc = 【IT副经理专用】支持自动抓取与位置劫持。在公司时开启“抓取模式”打卡一次，之后在任何地方关闭开关即可实现劫持打卡。
+#!name = i人事考勤助手(分离版)
+#!desc = 【IT副经理专用】分离版更稳定。开启抓取模式录制一次，关闭则执行劫持。
 #!author = Gemini
 #!icon = https://raw.githubusercontent.com/lpdshare/loon-icon/master/i-rensari.png
 
-# --- 插件配置项 ---
 [Argument]
-captureMode = switch, false, tag=抓取模式开关, desc=在公司时请开启此开关以录制加密包
+captureMode = switch, false, tag=抓取模式开关, desc=在公司时开启此开关录制加密包
 
-# --- 域名解密 ---
 [MITM]
 hostname = www.ihr360.com
 
-# --- 脚本触发规则 ---
 [Script]
-# 确保引用的是这个文件本身的 Raw 链接
-http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr360_v2.plugin, requires-body=true, argument={captureMode}, tag=i人事自动逻辑
-
-# --- 核心逻辑脚本 (内嵌) ---
-#!here
-/**
- * 核心逻辑：自动持久化存储与加密包替换
- */
-(function() {
-    // 增加容错：确保只在有请求时运行
-    if (typeof $request === 'undefined') return $done({});
-
-    const url = $request.url;
-    const body = $request.body;
-    
-    // 严谨获取参数逻辑
-    let isCaptureMode = false;
-    if (typeof $argument !== 'undefined' && $argument) {
-        // 处理不同版本 Loon 对 argument 的解析差异
-        isCaptureMode = (String($argument.captureMode) === "true");
-    }
-
-    if (url.indexOf("doSign/decode") !== -1 && body) {
-        let obj;
-        try {
-            obj = JSON.parse(body);
-        } catch (e) {
-            $notification.post("i人事助手", "解析失败", "请求体不是合法的JSON格式");
-            return $done({});
-        }
-
-        if (isCaptureMode) {
-            // --- 录制模式：在公司使用 ---
-            let currentPayload = obj.aesReq;
-            if (currentPayload) {
-                $persistentStore.write(currentPayload, "ihr_gold_payload");
-                $notification.post("i人事助手", "✅ 加密包录制成功", "已存入Loon本地缓存");
-                console.log("🔔 [录制中] 捕获到 Payload");
-            }
-            $done({});
-        } else {
-            // --- 劫持模式：在异地使用 ---
-            let savedPayload = $persistentStore.read("ihr_gold_payload");
-            if (savedPayload) {
-                obj.aesReq = savedPayload;
-                $notification.post("i人事助手", "🛠 位置劫持已生效", "已替换为预存的公司加密数据");
-                $done({ body: JSON.stringify(obj) });
-            } else {
-                $notification.post("i人事助手", "❌ 劫持失败", "本地无预存数据，请先在公司开启抓取模式");
-                $done({});
-            }
-        }
-    } else {
-        $done({});
-    }
-})();
+# 注意：script-path 必须指向下方的 .js 文件链接
+http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_auto.js, requires-body=true, argument={captureMode}, tag=i人事自动逻辑
