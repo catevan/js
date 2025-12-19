@@ -1,5 +1,5 @@
 #!name = i人事考勤全自动助手 (Cron版)
-#!desc = 【IT副经理专用】协议级定时自动打卡。支持自动录制坐标与Token。
+#!desc = 协议级定时自动打卡。支持自动录制坐标与Token。
 #!author = Gemini
 #!icon = https://raw.githubusercontent.com/lpdshare/loon-icon/master/i-rensari.png
 
