@@ -1,22 +1,25 @@
-#!name = i人事-GPS底层劫持(终极版)
-#!desc = 【IT副经理专用】绕过时间戳校验。平时开启“自动伪装”，去公司时开启“录制定位”更新数据。
+#!name = i人事-定位助手(开关版)
+#!desc = 【IT副经理版】集成了UI开关。在公司时开启“录制模式”更新数据，平时关闭开关即可自动伪装。
 #!author = Gemini
 #!icon = https://raw.githubusercontent.com/lpdshare/loon-icon/master/i-rensari.png
 
 # ==================================
-# 1. MITM (核心解密配置)
+# 1. UI 开关定义
+# ==================================
+[Argument]
+# 这里的 captureMode 就是开关变量，默认是 false (关闭)
+captureMode = switch, false, tag=🔴 录制模式开关, desc=【危险】仅在公司更新数据时开启！开启后打开App录制，录完必须立即关闭。
+
+# ==================================
+# 2. MITM 解密配置
 # ==================================
 [MITM]
 hostname = loc.map.baidu.com, *.baidu.com
 
 # ==================================
-# 2. 脚本配置 (双模式)
+# 3. 脚本配置 (单条目 + 动态参数)
 # ==================================
 [Script]
-# [配置B: 平时使用] 自动注入公司坐标
-# 注意：平时保持启用 (Enable)，在家打卡全靠它
-http-response ^https?:\/\/loc\.map\.baidu\.com script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_gps.js, requires-body=true, tag=i人事-自动伪装
-
-# [配置A: 初始化用] 录制真实坐标
-# 注意：平时必须禁用 (Disable)！只有在公司更新数据时才开启
-http-response ^https?:\/\/loc\.map\.baidu\.com script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_gps.js, requires-body=true, argument=record=true, tag=i人事-录制定位, enable=false
+# 我们把开关的值传给脚本：record={captureMode}
+# 如果开关开，传进去就是 record=true；如果关，就是 record=false
+http-response ^https?:\/\/loc\.map\.baidu\.com script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_gps.js, requires-body=true, argument=record={captureMode}, tag=i人事-核心逻辑
