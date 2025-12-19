@@ -1,17 +1,19 @@
 #!name = i人事考勤全自动助手 (Cron版)
-#!desc = 【IT副经理专用】协议级定时自动打卡。
+#!desc = 【IT副经理专用】协议级定时自动打卡。支持自动录制坐标与Token。
+#!author = Gemini
+#!icon = https://raw.githubusercontent.com/lpdshare/loon-icon/master/i-rensari.png
 
 [Argument]
-captureMode = switch, false, tag=抓取模式开关, desc=在公司时录制位置包和Token
+captureMode = switch, false, tag=抓取模式开关, desc=在公司时开启此开关并点击一次打卡
 
 [MITM]
 hostname = www.ihr360.com
 
 [Script]
-# 1. 录制脚本：用于在开启开关时，自动记录最新的位置包 (aesReq) 和 登录凭证 (Headers)
-http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=你的脚本链接.js, requires-body=true, argument={captureMode}, tag=i人事录制逻辑
+# 1. 录制逻辑：必须指向你 GitHub 上的同一个 JS 文件
+# 匹配接口调整为 doSign/decode，确保能抓到 aesReq
+http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_cron.js, requires-body=true, argument={captureMode}, tag=i人事录制逻辑
 
-# 2. 定时任务：周一到周五，早 08:10 和 晚 18:10 自动发包打卡
-# 这里的 cron 表达式可以根据需要调整
+# 2. 定时任务：Cron 表达式和路径检查
 cron "10 8 * * 1-5" script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_cron.js, tag=上班自动打卡
 cron "10 18 * * 1-5" script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_cron.js, tag=下班自动打卡
