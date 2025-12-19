@@ -1,52 +1,50 @@
 /**
- * i人事：自动存储与劫持脚本 (分离版)
+ * i人事：全自动助手 (修复增强版)
  */
 
 (function() {
-    // 基础校验
-    if (typeof $request === 'undefined' || !$request.body) {
-        return $done({});
-    }
+    if (typeof $request === 'undefined' || !$request.body) return $done({});
 
     const url = $request.url;
     const body = $request.body;
     
-    // 获取插件面板开关状态
+    // 兼容逻辑：处理 Loon 对参数的不同解析方式
     let isCaptureMode = false;
     if (typeof $argument !== 'undefined' && $argument) {
-        // 兼容不同版本的参数解析
+        // 将 argument 转换为字符串进行比对，防止布尔值判断失败
         isCaptureMode = (String($argument.captureMode) === "true");
     }
 
-    // 目标接口校验
     if (url.indexOf("doSign/decode") !== -1) {
-        let obj;
-        try {
-            obj = JSON.parse(body);
-        } catch (e) {
-            console.log("❌ JSON解析失败");
-            return $done({});
-        }
+        let obj = JSON.parse(body);
 
         if (isCaptureMode) {
             // --- 录制模式 ---
-            let currentPayload = obj.aesReq;
-            if (currentPayload) {
-                $persistentStore.write(currentPayload, "ihr_gold_payload");
-                $notification.post("i人事助手", "✅ 加密包录制成功", "已存入本地缓存，现在可以关闭开关了");
-                console.log("🔔 [录制] 已捕获加密包");
+            let payload = obj.aesReq;
+            if (payload && payload.length > 100) {
+                // 执行写入并获取结果
+                let saveStatus = $persistentStore.write(payload, "ihr_gold_payload_v2");
+                if (saveStatus) {
+                    $notification.post("i人事助手", "✅ 录制并存储成功", "数据长度：" + payload.length);
+                    console.log("🔔 [录制模式] 成功写入缓存 Key: ihr_gold_payload_v2");
+                } else {
+                    $notification.post("i人事助手", "❌ 存储失败", "请检查 Loon 权限或空间");
+                }
+            } else {
+                $notification.post("i人事助手", "⚠️ 录制失败", "未能从请求中提取到有效的加密包");
             }
             $done({});
         } else {
             // --- 劫持模式 ---
-            let savedPayload = $persistentStore.read("ihr_gold_payload");
-            if (savedPayload) {
-                obj.aesReq = savedPayload;
-                $notification.post("i人事助手", "🛠 位置劫持已生效", "正在使用预存的黄金加密包打卡");
-                console.log("🚀 [劫持] 成功注入本地加密包");
+            // 使用新的 Key 尝试读取
+            let savedData = $persistentStore.read("ihr_gold_payload_v2");
+            
+            if (savedData && savedData.length > 100) {
+                obj.aesReq = savedData;
+                $notification.post("i人事助手", "🛠 劫持生效", "已注入预存的加密数据包");
                 $done({ body: JSON.stringify(obj) });
             } else {
-                $notification.post("i人事助手", "❌ 劫持失败", "请先开启抓取模式录制一次");
+                $notification.post("i人事助手", "❌ 劫持失败", "本地缓存为空！请开启抓取模式录制");
                 $done({});
             }
         }
