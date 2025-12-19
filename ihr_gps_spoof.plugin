@@ -22,4 +22,4 @@ hostname = loc.map.baidu.com, *.baidu.com
 [Script]
 # 我们把开关的值传给脚本：record={captureMode}
 # 如果开关开，传进去就是 record=true；如果关，就是 record=false
-http-response ^https?:\/\/loc\.map\.baidu\.com script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_gps.js, requires-body=true, argument=record=false, tag=i人事-核心逻辑
+http-response ^https?:\/\/loc\.map\.baidu\.com script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_gps.js, requires-body=true, argument=record=true, tag=i人事-核心逻辑
