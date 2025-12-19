@@ -1,53 +1,62 @@
 /**
- * i人事：Cron 定时打卡脚本 (方案B)
+ * i人事：Cron 定时打卡脚本 (增强修复版)
  */
 
-const isCron = typeof $argument === 'undefined' || $argument === null;
+// 判断是否为 Cron 模式：Cron 任务没有 $request 对象
+const isCronTask = (typeof $request === 'undefined');
 
-if (!isCron) {
-    // --- 逻辑 A：录制/抓取模式 (手动打开 App 触发) ---
+if (!isCronTask) {
+    // --- 【抓取模式】 ---
     const url = $request.url;
-    const isCaptureMode = $argument.captureMode === "true";
+    const body = $request.body;
+    
+    // 强制检查参数
+    let isCaptureMode = false;
+    if (typeof $argument !== 'undefined' && $argument) {
+        isCaptureMode = (String($argument.captureMode) === "true");
+    }
 
-    if (url.indexOf("doSign/decode") !== -1 && isCaptureMode) {
-        let obj = JSON.parse($request.body);
-        if (obj.aesReq) {
-            // 存储加密位置包
-            $persistentStore.write(obj.aesReq, "ihr_gold_payload");
-            // 存储完整的 Headers (包含 Token/Cookie)
+    if (url.indexOf("doSign/decode") !== -1 && body) {
+        if (isCaptureMode) {
+            let obj = JSON.parse(body);
+            if (obj.aesReq) {
+                // 存入所有核心弹药
+                $persistentStore.write(obj.aesReq, "ihr_gold_payload");
+                $persistentStore.write(JSON.stringify($request.headers), "ihr_gold_headers");
+                $persistentStore.write(url, "ihr_gold_url");
+                
+                $notification.post("i人事助手", "✅ 录制成功", "数据已存入弹药库，可关闭开关");
+                console.log("📍 [录制] 成功捕获数据包");
+            }
+        } else {
+            // 如果没开开关，我们也静默更新 Token，确保 Cron 里的 Token 永远是最新的
             $persistentStore.write(JSON.stringify($request.headers), "ihr_gold_headers");
-            // 存储请求的 URL (包含 u_id 等参数)
-            $persistentStore.write(url, "ihr_gold_url");
-            
-            $notification.post("i人事助手", "✅ 录制成功", "已更新位置包、Token和URL");
+            console.log("🔄 [静默] 已同步最新 Token");
         }
     }
     $done({});
 
 } else {
-    // --- 逻辑 B：Cron 定时模式 (到点自动执行) ---
-    const savedPayload = $persistentStore.read("ihr_gold_payload");
-    const savedHeaders = $persistentStore.read("ihr_gold_headers");
-    const savedUrl = $persistentStore.read("ihr_gold_url");
+    // --- 【Cron 定时打卡模式】 ---
+    const payload = $persistentStore.read("ihr_gold_payload");
+    const headers = $persistentStore.read("ihr_gold_headers");
+    const targetUrl = $persistentStore.read("ihr_gold_url");
 
-    if (savedPayload && savedHeaders && savedUrl) {
+    if (payload && headers && targetUrl) {
         const requestGroup = {
-            url: savedUrl,
-            headers: JSON.parse(savedHeaders),
-            body: JSON.stringify({ "aesReq": savedPayload })
+            url: targetUrl,
+            headers: JSON.parse(headers),
+            body: JSON.stringify({ "aesReq": payload })
         };
 
         $httpClient.post(requestGroup, function(error, response, data) {
             if (!error && response.status === 200) {
-                $notification.post("i人事助手", "✨ 定时打卡成功", "数据已静默提交服务器");
-                console.log("🚀 [Cron] 响应结果: " + data);
+                $notification.post("i人事助手", "✨ 定时打卡成功", "协议已自动提交");
             } else {
-                $notification.post("i人事助手", "⚠️ 定时打卡异常", "Token可能已过期或网络波动，建议打开App刷新Token");
-                console.log("❌ [Cron] 错误: " + error);
+                $notification.post("i人事助手", "⚠️ 定时打卡失败", "原因: " + (error || "Token过期"));
             }
         });
     } else {
-        $notification.post("i人事助手", "❌ 定时任务终止", "缺少录制数据，请先手动打卡一次录制");
+        $notification.post("i人事助手", "❌ 任务终止", "缺少数据包，请先开启开关打一次卡");
     }
-    // Cron 脚本不需要 $done
 }
