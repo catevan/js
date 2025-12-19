@@ -14,7 +14,7 @@ hostname = www.ihr360.com
 # --- 脚本触发规则 ---
 [Script]
 # 使用内部脚本方式，匹配打卡核心解码接口
-http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/your_user/your_repo/main/ihr360_v2.plugin, requires-body=true, argument={captureMode}, tag=i人事自动逻辑
+http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr360_v2.plugin, requires-body=true, argument={captureMode}, tag=i人事自动逻辑
 
 # --- 核心逻辑脚本 (内嵌) ---
 /**
