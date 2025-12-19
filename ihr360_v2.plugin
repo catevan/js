@@ -9,7 +9,7 @@ hostname = www.ihr360.com
 
 [Script]
 # 1. 录制脚本：用于在开启开关时，自动记录最新的位置包 (aesReq) 和 登录凭证 (Headers)
-http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/.* script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr_cron.js, requires-body=true, argument={captureMode}, tag=i人事录制逻辑
+http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=你的脚本链接.js, requires-body=true, argument={captureMode}, tag=i人事录制逻辑
 
 # 2. 定时任务：周一到周五，早 08:10 和 晚 18:10 自动发包打卡
 # 这里的 cron 表达式可以根据需要调整
