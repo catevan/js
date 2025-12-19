@@ -1,0 +1,80 @@
+#!name = i人事考勤全自动助手 (V3)
+#!desc = 【IT副经理专用】单文件版。开启“抓取模式”打卡录制数据，关闭后在任何地方点击打卡即实现位置劫持。
+#!author = Gemini
+#!icon = https://raw.githubusercontent.com/lpdshare/loon-icon/master/i-rensari.png
+
+[Argument]
+captureMode = switch, false, tag=抓取模式开关, desc=在公司时开启此开关录制加密包
+
+[MITM]
+hostname = www.ihr360.com
+
+[Script]
+# 使用 http-request 拦截核心打卡接口
+http-request ^https:\/\/www\.ihr360\.com\/gateway\/attendance\/sign\/attendanceSign\/doSign\/decode script-path=https://raw.githubusercontent.com/catevan/js/refs/heads/main/ihr360_v2.plugin, requires-body=true, argument={captureMode}, tag=i人事自动逻辑
+
+#!here
+/**
+ * 核心逻辑：自动持久化存储与加密包替换
+ */
+(function() {
+    // 基础环境检查
+    if (typeof $request === 'undefined' || !$request.body) {
+        return $done({});
+    }
+
+    const url = $request.url;
+    const body = $request.body;
+    
+    // 1. 严谨获取插件面板上的开关状态
+    let isCaptureMode = false;
+    if (typeof $argument !== 'undefined' && $argument) {
+        // 兼容处理：确保不管是布尔值还是字符串都能准确识别
+        isCaptureMode = (String($argument.captureMode) === "true");
+    }
+
+    // 2. 识别打卡接口
+    if (url.indexOf("doSign/decode") !== -1) {
+        let obj;
+        try {
+            obj = JSON.parse(body);
+        } catch (e) {
+            console.log("❌ [i人事] JSON解析失败");
+            return $done({});
+        }
+
+        if (isCaptureMode) {
+            // --- 录制模式：在公司使用 ---
+            let currentPayload = obj.aesReq;
+            if (currentPayload && currentPayload.length > 50) {
+                // 使用全新的 Key 确保不冲突
+                const success = $persistentStore.write(currentPayload, "ihr_gold_data_final");
+                if (success) {
+                    $notification.post("i人事助手", "✅ 录制并存储成功", "数据已存入缓存，请关闭开关测试劫持");
+                    console.log("🔔 [录制] 已捕获加密包：" + currentPayload.substring(0, 20) + "...");
+                } else {
+                    $notification.post("i人事助手", "❌ 存储失败", "Loon 本地确权异常");
+                }
+            }
+            $done({}); // 录制时不修改请求，让本次打卡真实完成
+        } else {
+            // --- 劫持模式：在异地使用 ---
+            let savedPayload = $persistentStore.read("ihr_gold_data_final");
+            
+            if (savedPayload && savedPayload.length > 50) {
+                obj.aesReq = savedPayload;
+                console.log("🚀 [劫持] 正在执行位置模拟...");
+                $notification.post("i人事助手", "🛠 模拟位置已生效", "已自动注入公司加密地理数据");
+                // 返回修改后的 Body 实现打卡成功
+                $done({ body: JSON.stringify(obj) });
+            } else {
+                // 此时读取为空，可能是因为之前没录制成功
+                $notification.post("i人事助手", "❌ 劫持失败", "本地库为空！请先开启抓取模式录制一次");
+                console.log("❌ [劫持] 本地无可用缓存数据");
+                $done({});
+            }
+        }
+    } else {
+        $done({});
+    }
+})();
